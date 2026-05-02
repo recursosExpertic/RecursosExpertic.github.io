@@ -1787,4 +1787,24 @@
       });
     })();
   </script>
+  <!--Abrir enlaces-->
+  <script>
+    (function () {
+      // Abre enlaces externos a través del padre para evitar bloqueos del iframe
+      var externalLinks = document.querySelectorAll('.ae-page a[target="_blank"]');
+  
+      externalLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          if (window.parent !== window) {
+            e.preventDefault();
+            window.parent.postMessage(
+              { tipo: 'abrirUrl', url: this.href },
+              '*'
+            );
+          }
+          // Si se ve sin iframe, el target="_blank" nativo funciona solo
+        });
+      });
+    })();
+  </script>
 </div>
