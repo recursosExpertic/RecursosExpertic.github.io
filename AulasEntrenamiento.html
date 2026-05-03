@@ -1099,6 +1099,76 @@
     .ae-page .table-matematicas td {
       color: #3a3a0a;
     }
+
+    /* FAQ — zona de reporte al pie */
+    .ae-page .faq-report-zone {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 28px;
+      padding: 18px 24px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+    }
+
+    .ae-page .faq-report-zone p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: rgba(232, 234, 246, 0.65);
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .ae-page .faq-report-btns {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .ae-page .btn-report {
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background var(--transition), transform var(--transition);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .ae-page .btn-report:hover {
+      transform: translateY(-1px);
+    }
+
+    .ae-page .btn-report-outline {
+      background: transparent;
+      color: var(--text-white);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .ae-page .btn-report-outline:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .ae-page .btn-report-primary {
+      background: var(--card-blue);
+      color: var(--text-white);
+      border: 1px solid rgba(109, 190, 69, 0.35);
+    }
+
+    .ae-page .btn-report-primary:hover {
+      background: #243580;
+    }
+
+    @media (max-width: 600px) {
+      .ae-page .faq-report-zone {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
   <div class="ae-page"> <!-- NAVBAR -->
     <nav id="navbar">
@@ -1226,7 +1296,7 @@
               </table>
             </div>
           </div>
-        </details> <!-- F&#xED;sica -->
+        </details> <!-- Fisica -->
         <details>
           <summary style="font-size:20px;">Escuela de Física</summary>
           <div class="details-body">
@@ -1530,7 +1600,8 @@
           </div>
         </details>
       </div>
-    </section> <!-- FAQ -->
+    </section> 
+    <!-- FAQ -->
     <section id="faq" class="section-pad">
       <div class="ae-container">
         <h2 class="section-title" style="font-size:34px;">Preguntas frecuentes</h2>
@@ -1563,8 +1634,21 @@
           <div class="details-body">Debe usar exclusivamente su <strong>correo institucional UIS</strong>
             (usuario@correo.uis.edu.co). No se aceptan correos personales (Gmail, Hotmail, etc.).</div>
         </details>
+        <!-- Zona de reporte de errores -->
+        <div class="faq-report-zone">
+          <p>¿Tuviste algún inconveniente o quieres compartir tu opinión sobre las plataformas?</p>
+          <div class="faq-report-btns">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSfcnOGWl2lPhVLNfE0N915oN4x8_NmxOxBwREZSNoo1UONZsw/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn-report btn-report-outline">
+              Experiencia y Satisfacción
+            </a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdWhT9I-NvBmbCuOy0rhzpW7csbZOMT23C3B-7yvVTcI0z_Yw/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn-report btn-report-primary">
+              Atención y Sugerencias
+            </a>
+          </div>
+        </div>
       </div>
-    </section> <!-- SOBRE NOSOTROS -->
+    </section> 
+    <!-- SOBRE NOSOTROS -->
     <section id="sobre-nosotros" class="section-pad">
       <div class="ae-container">
         <h2 class="section-title" style="font-size:34px;">Sobre nosotros</h2>
@@ -1783,26 +1867,6 @@
             var offsetTop = target.getBoundingClientRect().top + window.scrollY - NAVBAR_HEIGHT;
             window.scrollTo({ top: offsetTop, behavior: 'smooth' });
           }
-        });
-      });
-    })();
-  </script>
-  <!--Abrir enlaces-->
-  <script>
-    (function () {
-      // Abre enlaces externos a través del padre para evitar bloqueos del iframe
-      var externalLinks = document.querySelectorAll('.ae-page a[target="_blank"]');
-  
-      externalLinks.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          if (window.parent !== window) {
-            e.preventDefault();
-            window.parent.postMessage(
-              { tipo: 'abrirUrl', url: this.href },
-              '*'
-            );
-          }
-          // Si se ve sin iframe, el target="_blank" nativo funciona solo
         });
       });
     })();
