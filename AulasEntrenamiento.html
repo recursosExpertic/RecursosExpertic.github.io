@@ -144,26 +144,39 @@
 
     /* HERO */
     .ae-page #inicio {
-      background: var(--bg-dark);
+      background-image: url('https://drive.google.com/thumbnail?id=184mStV9iVGxRHkwAAOSVFmSc9mH422s-&sz=w2000');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
       position: relative;
       overflow: hidden;
       padding-top: 60px;
       padding-bottom: 60px;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ae-page #inicio::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(4, 13, 40, 0.62) 0%, rgba(4, 13, 40, 0.42) 45%, rgba(4, 13, 40, 0.58) 100%);
+      z-index: 0;
     }
 
     .ae-page .hero-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
+      grid-template-columns: 1fr;
+      gap: 0;
       align-items: center;
+      width: 100%;
+      position: relative;
+      z-index: 1;
     }
 
     .ae-page .hero-visual {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 380px;
+      display: none;
     }
 
     .ae-page .hero-robot-img {
@@ -225,7 +238,7 @@
     .ae-page .hero-eyebrow {
       font-family: 'Source Serif 4', serif;
       font-size: 1rem;
-      color: rgba(232, 234, 246, 0.7);
+      color: rgba(255, 255, 255, 0.9);
       margin-bottom: 8px;
     }
 
@@ -237,9 +250,15 @@
 
     .ae-page .hero-desc {
       font-size: 1.2rem;
-      color: rgba(232, 234, 246, 0.8);
+      color: rgba(255, 255, 255, 0.93);
       max-width: 440px;
       margin-bottom: 36px;
+    }
+
+    .ae-page .hero-content {
+      max-width: 560px;
+      margin-left: auto;
+      padding-right: 8px;
     }
 
     .ae-page .hero-buttons {
@@ -297,17 +316,17 @@
     }
 
     @media (max-width: 768px) {
+      .ae-page #inicio {
+        min-height: 540px;
+      }
+
       .ae-page .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
+        gap: 0;
       }
 
-      .ae-page .hero-visual {
-        min-height: 260px;
-      }
-
-      .ae-page .hero-robot-img {
-        max-height: 260px;
+      .ae-page .hero-content {
+        margin-left: 0;
+        padding-right: 0;
       }
 
       .ae-page .hero-buttons {
@@ -370,28 +389,35 @@
     }
 
     .ae-page .step-card {
-      background: var(--accent-green-light);
+      background: #f9fff1;
+      border: 1px solid #d5e8c0;
       border-radius: 14px;
-      padding: 32px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      box-shadow: 0 3px 16px rgba(0, 0, 0, 0.08);
+      padding: 24px 22px;
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      column-gap: 14px;
+      row-gap: 8px;
+      align-items: start;
+      box-shadow: 0 8px 20px rgba(18, 34, 67, 0.08);
     }
 
     .ae-page .step-number {
       flex-shrink: 0;
-      width: 60px;
-      height: 60px;
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
-      background: var(--card-blue);
-      color: var(--text-white);
+      background: linear-gradient(160deg, #2d468a 0%, #1a2f6b 100%);
+      color: #fff;
+      border: 3px solid #b6db6b;
+      box-shadow: 0 6px 16px rgba(26, 47, 107, 0.25);
       font-family: 'Outfit', sans-serif;
       font-weight: 700;
-      font-size: 1.6rem;
+      font-size: 1.5rem;
+      line-height: 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-top: 2px;
     }
 
     .ae-page .step-emoji {
@@ -404,6 +430,8 @@
       font-size: 1.08rem;
       color: #2a3a1f;
       line-height: 1.6;
+      margin: 0;
+      grid-column: 2;
     }
 
     .ae-page .step-card .btn {
@@ -411,11 +439,24 @@
       padding: 10px 22px;
       font-size: 0.95rem;
       width: auto;
+      grid-column: 2;
+      margin-top: 6px;
     }
 
     @media (max-width: 768px) {
       .ae-page .steps-grid {
         grid-template-columns: 1fr;
+      }
+
+      .ae-page .step-card {
+        grid-template-columns: 66px 1fr;
+        padding: 20px 16px;
+      }
+
+      .ae-page .step-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
       }
     }
 
@@ -775,23 +816,34 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: var(--radius);
       padding: 16px 18px;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 10px;
+      row-gap: 4px;
+      align-items: start;
     }
 
     .ae-page .sn-info-card-icon {
       font-size: 1.3rem;
-      margin-bottom: 6px;
+      margin-bottom: 0;
+      grid-row: 1 / span 2;
+      align-self: start;
+      margin-top: 2px;
     }
 
     .ae-page .sn-info-card h4 {
       font-size: 0.9rem;
       color: var(--text-white);
       margin-bottom: 4px;
+      grid-column: 2;
+      margin-top: 0;
     }
 
     .ae-page .sn-info-card p {
       font-size: 0.82rem;
       color: rgba(232, 234, 246, 0.62);
       margin: 0;
+      grid-column: 2;
     }
 
     .ae-page .sn-benefits-grid {
@@ -1187,15 +1239,6 @@
     <section id="inicio">
       <div class="ae-container">
         <div class="hero-grid">
-          <div class="hero-visual" aria-hidden="true">
-            <div class="hero-glow"></div>
-            <div class="formula-badge f1">E = mc²</div>
-            <div class="formula-badge f2">∫ √x dx</div>
-            <div class="formula-badge f3">y = ax² + bx + c</div>
-            <div class="formula-badge f4">⚗ Química</div>
-            <div class="formula-badge f5">🧬 Biología</div> <img class="hero-robot-img"
-              src="https://drive.google.com/thumbnail?id=1BzgsW-LOt7G-eNdAq72oY8pAjMEhHcCu&amp;sz=w800" alt="ExperBOT">
-          </div>
           <div class="hero-content">
             <p class="hero-eyebrow" style="font-size:20px;">Bienvenido a</p>
             <h1 class="hero-title" style="font-size:42px;">Aulas de<br>Entrenamiento</h1>
@@ -1212,7 +1255,7 @@
     </section> <!-- ACCESO -->
     <section id="acceso" class="section-pad">
       <div class="ae-container">
-        <h2 class="section-title dark" style="font-size:34px;">¿Cómo acceder a los cursos?</h2>
+        <h2 class="section-title dark" style="font-size:34px;">Instructivo de acceso a los cursos</h2>
         <p class="section-subtitle" style="font-size:20px;color:#455075;">Consulte las aulas de entrenamiento disponibles,
           ingrese a su asignatura y realice la prueba de 14 días. Lea primero toda la información y luego siga las
           indicaciones.</p>
@@ -1584,18 +1627,6 @@
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>
-        </details> <!-- Ingenier&#xED;a -->
-        <details>
-          <summary style="font-size:20px;">Escuela de Ingeniería</summary>
-          <div class="details-body">
-            <div
-              style="background:#f5f7fa; border-radius:8px; padding:24px; text-align:center; color:#455075; border:2px dashed #c5cae9;">
-              <div style="font-size:1.8rem; margin-bottom:10px;">🔧</div> <strong
-                style="font-family:'Outfit',sans-serif; color:#1a2f6b; font-size:1rem;">Próximamente</strong>
-              <p style="margin-top:8px; font-size:20px;">Los cursos de esta escuela estarán disponibles en el próximo
-                semestre.</p>
             </div>
           </div>
         </details>
