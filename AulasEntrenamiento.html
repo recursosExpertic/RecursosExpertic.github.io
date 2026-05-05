@@ -59,7 +59,7 @@
     .ae-page h3,
     .ae-page h4,
     .ae-page h5 {
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       line-height: 1.2;
     }
@@ -101,7 +101,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 600;
       font-size: 1.25rem;
       color: var(--text-white);
@@ -123,7 +123,7 @@
     }
 
     .ae-page .nav-links a {
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 600;
       font-size: 1.05rem;
       color: var(--text-white);
@@ -194,7 +194,7 @@
       border: 1px solid rgba(109, 190, 69, 0.4);
       border-radius: 8px;
       padding: 6px 12px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-size: 0.85rem;
       color: var(--text-light);
       backdrop-filter: blur(4px);
@@ -275,7 +275,7 @@
       width: 100%;
       padding: 16px 28px;
       border-radius: 8px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 600;
       font-size: 1.1rem;
       text-align: center;
@@ -313,6 +313,13 @@
 
     .ae-page .btn-outline:hover {
       background: rgba(255, 255, 255, 0.08);
+    }
+
+    .ae-page .btn-acceso {
+      max-width: 350px;       
+      width: auto;            
+      margin-left: auto;
+      margin-right: auto;
     }
 
     @media (max-width: 768px) {
@@ -410,7 +417,7 @@
       color: #fff;
       border: 3px solid #b6db6b;
       box-shadow: 0 6px 16px rgba(26, 47, 107, 0.25);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 1.5rem;
       line-height: 1;
@@ -486,7 +493,7 @@
       padding: 18px 22px;
       background: #fff;
       color: var(--card-blue);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 1.15rem;
       cursor: pointer;
@@ -535,7 +542,7 @@
       padding: 18px 22px;
       background: rgba(255, 255, 255, 0.04);
       color: var(--text-white);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 1.05rem;
       cursor: pointer;
@@ -595,7 +602,7 @@
 
     .ae-page .course-table th {
       padding: 10px 14px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 600;
       font-size: 0.8rem;
       white-space: nowrap;
@@ -625,7 +632,7 @@
       border-radius: 20px;
       font-size: 0.73rem;
       font-weight: 700;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       white-space: nowrap;
     }
 
@@ -676,7 +683,7 @@
       background: var(--accent-green);
       color: #1a2340;
       border-radius: 6px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 0.78rem;
       white-space: nowrap;
@@ -720,7 +727,7 @@
       padding: 16px 22px;
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-white);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 1rem;
       cursor: pointer;
@@ -990,7 +997,7 @@
       border-radius: 50%;
       background: var(--accent-green);
       color: var(--text-dark);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 700;
       font-size: 0.82rem;
       display: flex;
@@ -1170,7 +1177,7 @@
       margin: 0;
       font-size: 0.95rem;
       color: rgba(232, 234, 246, 0.65);
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
     }
 
     .ae-page .faq-report-btns {
@@ -1182,7 +1189,7 @@
     .ae-page .btn-report {
       padding: 9px 18px;
       border-radius: 8px;
-      font-family: 'Outfit', sans-serif;
+      font-family: Garamond;
       font-weight: 600;
       font-size: 0.9rem;
       cursor: pointer;
@@ -1245,8 +1252,8 @@
             <p class="hero-desc" style="font-size:20px;">Una estrategia de ExperTIC para el fortalecimiento de tus
               habilidades en diferentes áreas.</p>
             <div class="hero-buttons"> 
-              <a href="#instructivo" class="btn btn-blue">Ya soy miembro</a> 
-              <a href="#acceso" class="btn btn-green">Quiero empezar</a> 
+              <a href="#acceso" class="btn btn-blue">Ya soy miembro</a> 
+              <a href="#instructivo" class="btn btn-green">Quiero empezar</a> 
               <a href="#faq" class="btn btn-outline">FAQ</a> 
             </div>
           </div>
@@ -1293,6 +1300,7 @@
       <div class="ae-container">
         <h2 class="section-title dark" style="font-size:34px;">Acceso a los cursos</h2>
         <p class="section-subtitle" style="font-size:20px;color:#455075; margin-bottom:40px;">Una vez inscrito en los cursos, puede ingresar a través del siguiente botón, recuerde que debe ingresar su usuario (correo electrónico institucional) y contraseña.</p>
+        <a href="https://accounts.mheducation.com/login?app=connect.mheducation.com" class="btn btn-green btn-acceso" target="_blank" rel="noopener noreferrer">Ingresar a los cursos</a>
         <h3 class="schools-title" style="font-size:24px;">Escuelas disponibles</h3> <!-- E3T -->
         <details>
           <summary style="font-size:20px;">Escuela E3T</summary>
@@ -1876,7 +1884,7 @@
     <footer>
       <div class="ae-container">
         <div class="footer-inner"> <img
-            src="https://drive.google.com/thumbnail?id=1AmdyxKfPWpv-DuVL5ObqJFOWUZeTIqlK&amp;sz=w400" alt="ExperTIC UIS"
+            src="https://drive.google.com/thumbnail?id=1kHj_19duUO52yWLbwa4GnuLcLmvyDPg8&amp;sz=w400" alt="ExperTIC UIS"
             class="footer-logo">
           <p class="footer-text" style="font-size:20px;"> Aulas de Entrenamiento — una estrategia de <a
               href="https://expertic.uis.edu.co" target="_blank" rel="noopener noreferrer">ExperTIC</a> · Universidad
