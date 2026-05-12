@@ -1550,22 +1550,19 @@
   </div>
   <!--Script para enviar la altura-->
   <script>
-    (function () {
-    
-      function enviarAltura() {
-        const altura = document.body.offsetHeight;
-        parent.postMessage(
-          { tipo: 'setAltura', altura: altura },
-          '*'
-        );
-      }
-    
-      // Solo enviar cuando cargue
-      window.addEventListener('load', enviarAltura);
-    
-      // Y cuando cambie el tamaño de pantalla
-      window.addEventListener('resize', enviarAltura);
-    
+    (function() {
+        function enviarAltura() {
+        var altura = document.documentElement.scrollHeight;
+        parent.postMessage({ tipo: 'setAltura', altura: altura }, '*');
+        }
+
+        // Enviar cuando el DOM esté listo y cada vez que cambie el contenido
+        window.addEventListener('load', enviarAltura);
+        window.addEventListener('resize', enviarAltura);
+
+        // También monitorear cambios en el DOM (útil si el contenido se modifica dinámicamente)
+        var observer = new MutationObserver(enviarAltura);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
     })();
   </script>
   <!--Script para navegacion-->
