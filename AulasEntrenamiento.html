@@ -647,16 +647,21 @@
     }
 
     .ae-page .pin-badge {
+      cursor: pointer;                /* ya lo tenías, ahora además */
+      touch-action: manipulation;     /* evita retrasos en doble toque */
+      user-select: none;              /* evita que se seleccione texto accidentalmente al tocar */
       display: inline-block;
-      background: var(--accent-green-light);
-      color: #1a3a0a;
-      border: 1px solid #9ad46a;
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.75rem;
-      white-space: nowrap;
-      letter-spacing: 0.4px;
+      padding: 8px 14px;              /* aumenta el área de toque */
+      font-size: 0.9rem;              /* un poco más grande para leer y tocar */
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent; /* quita el sombreado azul en iOS */
+    }
+
+    /* Efecto al tocar para dar feedback */
+    .ae-page .pin-badge:active {
+      transform: scale(0.96);
+      background: #c2e0a7; /* un verde más claro, puedes ajustar */
     }
 
     .ae-page .icon-link {
@@ -1740,5 +1745,48 @@
     window.addEventListener('DOMContentLoaded', () => {
       SCHOOLS.forEach(school => cargarHoja(school));
     });
+
+    // --- Copiar PIN al hacer clic ---
+    document.addEventListener('click', function (e) {
+    // Buscar si se hizo clic en un elemento .pin-badge
+    const badge = e.target.closest('.pin-badge');
+    if (!badge) return; // Si no es un PIN, no hacemos nada
+
+    e.preventDefault();
+    const pinOriginal = badge.textContent.trim();
+
+    // Intentar usar la API moderna del portapapeles
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(pinOriginal)
+        .then(() => mostrarConfirmacion(badge, pinOriginal))
+        .catch(() => copiarFallback(badge, pinOriginal));
+    } else {
+        // Fallback para navegadores antiguos
+        copiarFallback(badge, pinOriginal);
+    }
+    });
+
+    function mostrarConfirmacion(badge, textoOriginal) {
+        badge.textContent = '¡Copiado!';
+        setTimeout(() => {
+            badge.textContent = textoOriginal;
+        }, 1500);
+    }
+
+    function copiarFallback(badge, texto) {
+        const textarea = document.createElement('textarea');
+        textarea.value = texto;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            mostrarConfirmacion(badge, texto);
+        } catch (err) {
+            console.error('No se pudo copiar el PIN', err);
+        }
+        document.body.removeChild(textarea);
+    }
   </script>
 </div>
