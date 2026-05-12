@@ -1551,18 +1551,21 @@
   <!--Script para enviar la altura-->
   <script>
     (function() {
-        function enviarAltura() {
-        var altura = document.documentElement.scrollHeight;
-        parent.postMessage({ tipo: 'setAltura', altura: altura }, '*');
-        }
-
-        // Enviar cuando el DOM esté listo y cada vez que cambie el contenido
-        window.addEventListener('load', enviarAltura);
-        window.addEventListener('resize', enviarAltura);
-
-        // También monitorear cambios en el DOM (útil si el contenido se modifica dinámicamente)
-        var observer = new MutationObserver(enviarAltura);
-        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+      var timer;
+      function enviarAltura() {
+        clearTimeout(timer);
+        timer = setTimeout(function() {
+          var altura = document.documentElement.scrollHeight;
+          parent.postMessage({ tipo: 'setAltura', altura: altura }, '*');
+        }, 150); // espera 150ms antes de enviar
+      }
+    
+      window.addEventListener('load', enviarAltura);
+      window.addEventListener('resize', enviarAltura);
+    
+      var observer = new MutationObserver(enviarAltura);
+      observer.observe(document.body, { childList: true, subtree: true });
+      // ⚠️ Se elimina attributes: true para evitar el bucle
     })();
   </script>
   <!--Script para navegacion-->
@@ -1685,6 +1688,19 @@
       }
     }
 
+    // Variable global para rastrear cuántas escuelas han cargado
+    let escuelasCargadas = 0;
+    
+    async function cargarHoja(school) {
+      // ...tu código existente...
+    
+      escuelasCargadas++;
+      if (escuelasCargadas >= SCHOOLS.length) {
+        enviarAltura(); // envío final con la altura real
+        observer.disconnect(); // ya no necesitamos observar más
+      }
+    }
+    
     function buildRow(row, headers) {
       // Función auxiliar para obtener el valor de una columna por su nombre
       const get = (colName) => {
