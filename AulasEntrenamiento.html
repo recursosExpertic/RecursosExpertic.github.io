@@ -1550,15 +1550,20 @@
   </div>
   <!--Script para enviar la altura-->
   <script>
-    function enviarAltura() {
-      const altura = document.documentElement.scrollHeight;
-      window.parent.postMessage({ tipo: 'setAltura', altura: altura }, '*');
-    }
-    // Enviar cuando cargue y cada vez que cambie el tamaño
-    window.addEventListener('load', enviarAltura);
-    window.addEventListener('resize', enviarAltura);
-    // También por si el contenido cambia (ej. acordeones abiertos)
-    new MutationObserver(enviarAltura).observe(document.body, { childList: true, subtree: true });
+    (function() {
+        function enviarAltura() {
+        var altura = document.documentElement.scrollHeight;
+        parent.postMessage({ tipo: 'setAltura', altura: altura }, '*');
+        }
+
+        // Enviar cuando el DOM esté listo y cada vez que cambie el contenido
+        window.addEventListener('load', enviarAltura);
+        window.addEventListener('resize', enviarAltura);
+
+        // También monitorear cambios en el DOM (útil si el contenido se modifica dinámicamente)
+        var observer = new MutationObserver(enviarAltura);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+    })();
   </script>
   <!--Script para navegacion-->
   <script>
@@ -1647,7 +1652,7 @@
 
         // Construir el bloque <details> completo
         const detallesHTML = `
-          <details open>
+          <details>
             <summary style="font-size:20px;">${school.title}</summary>
             <div class="details-body">
               <div class="course-table-wrap">
