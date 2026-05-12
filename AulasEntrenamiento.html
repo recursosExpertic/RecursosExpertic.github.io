@@ -1553,7 +1553,7 @@
     (function () {
     
       function enviarAltura() {
-        const altura = document.documentElement.scrollHeight;
+        const altura = document.body.offsetHeight;
         parent.postMessage(
           { tipo: 'setAltura', altura: altura },
           '*'
