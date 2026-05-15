@@ -1595,7 +1595,7 @@
   <!--Script para leer los datos de las sheets-->
   <script>
     // Base de tu publicación CSV (sin el &gid, ya lo añadimos en la función)
-    const BASE_TSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR6V29LDN1VffChGniH7AJpgXgzlrY28AbKX6fDJTzkwqyWslnIOEU-as1RSJAgy1G4Tc2FjtuF9i47/pub?output=tsv';
+    const BASE_TSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROVAjcR21cudmX98yuu4YqqIqdMPTfG9xXK1mJkSNUfGkSjcccqAn8UzjW2OcIVC0tlgvozS3nMKRj/pub?output=tsv';
 
     // Configuración para cada escuela (gid, título y clase de tabla)
     const SCHOOLS = [
@@ -1664,7 +1664,7 @@
                       <th>Plataforma</th>
                       <th>Libro</th>
                       <th>PIN de acceso</th>
-                      <th>Recursos</th>
+                      <th>Temario ExperTIC</th>
                       <th>Acceso</th>
                     </tr>
                   </thead>
@@ -1697,7 +1697,7 @@
       const plataforma = get('Plataforma');
       const libro = get('Libros Connect');
       const pin = get('Pin de acceso');
-      const acuerdoCA = get('Acuerdo CA');
+      const TemarioExperTIC = get('Temario ExperTIC');
       const enlaceCurso = get('Enlace al curso');
 
       // Badge de plataforma (Connect o Aleks)
@@ -1721,8 +1721,8 @@
 
       // Recursos (Acuerdo CA)
       let recursosHTML = '';
-      if (acuerdoCA && acuerdoCA.startsWith('http')) {
-        recursosHTML = `<a href="${acuerdoCA}" target="_blank" class="icon-link">📄 Acuerdo CA</a>`;
+      if (TemarioExperTIC && TemarioExperTIC.startsWith('http')) {
+        recursosHTML = `<a href="${TemarioExperTIC}" target="_blank" class="icon-link">📄 Temario ExperTIC</a>`;
       } else {
         recursosHTML = '—';
       }
