@@ -530,6 +530,69 @@
       background: #fafbff;
     }
 
+    /* Biologia */
+    .libro-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 1rem 0 2rem;
+    }
+    .libro-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+    .libro-card-img { width: 100%; height: 180px; object-fit: cover; }
+    .libro-card-img-placeholder {
+      width: 100%; height: 180px;
+      display: flex; align-items: center; justify-content: center;
+      background: #f5f5f5; color: #aaa; font-size: 14px;
+    }
+    .libro-card-body { padding: 1rem; flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .libro-titulo { font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+    .libro-meta { font-size: 13px; color: #555; margin: 0; display: flex; gap: 6px; }
+    .libro-meta-label { color: #999; min-width: 62px; }
+    .libro-card-footer { padding: 0.75rem 1rem; border-top: 1px solid #f0f0f0; }
+    .lecciones-section { margin-top: 1.5rem; }
+    .lecciones-wrap { overflow-x: auto; }
+    .lecciones-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .lecciones-table th, .lecciones-table td {
+      text-align: left; padding: 8px 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .lecciones-table th { font-weight: 600; color: #555; white-space: nowrap; }
+    .leccion-link { color: #1a73e8; text-decoration: none; }
+    .leccion-link:hover { text-decoration: underline; }
+    .no-link { color: #bbb; }
+
+    #tabla-bio .libro-card {
+      border-radius: var(--radius);  /* mismo radio que tu tabla */
+      box-shadow: var(--shadow-card);
+    }
+
+    /* Centrar los enlaces "✔️" en todas las celdas excepto la primera columna */
+    .lecciones-table td:not(:first-child) {
+      text-align: center;
+      vertical-align: middle;  /* opcional: centrado vertical también */
+    }
+
+    .lecciones-table td .leccion-link {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #eef2f0;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .lecciones-table td .leccion-link:hover {
+      background: #d9eccc;
+      text-decoration: none;
+    }
+
     /* FAQ dark details */
     .ae-page .faq-details {
       border: 1px solid var(--border-subtle);
@@ -1594,189 +1657,258 @@
   </script>
   <!--Script para leer los datos de las sheets-->
   <script>
-    // Base de tu publicación CSV (sin el &gid, ya lo añadimos en la función)
+    // ==================== CONFIGURACIÓN ====================
     const BASE_TSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROVAjcR21cudmX98yuu4YqqIqdMPTfG9xXK1mJkSNUfGkSjcccqAn8UzjW2OcIVC0tlgvozS3nMKRj/pub?output=tsv';
+    const LIBROS_TSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRzSQCZ_Jd3FOErN7ercHV3-tbXxnghKa94xErG8roHN3761dUfw9nhGVeETq5g3g/pub?output=tsv';
 
-    // Configuración para cada escuela (gid, título y clase de tabla)
     const SCHOOLS = [
-      {
-        gid: 2547548,
-        containerId: 'tabla-e3t',
-        title: 'Escuela E3T',
-        tableClass: 'table-e3t'
-      },
-      {
-        gid: 704898453,
-        containerId: 'tabla-mat',
-        title: 'Escuela de Matemáticas',
-        tableClass: 'table-matematicas'
-      },
-      {
-        gid: 915914968,
-        containerId: 'tabla-fis',
-        title: 'Escuela de Física',
-        tableClass: 'table-fisica'
-      },
-      {
-        gid: 405299746,
-        containerId: 'tabla-bio',
-        title: 'Escuela de Biología',
-        tableClass: 'table-biologia'
-      },
-      {
-        gid: 373143542,
-        containerId: 'tabla-qui',
-        title: 'Escuela de Química',
-        tableClass: 'table-quimica'
-      }
+        { gid: 2547548,      containerId: 'tabla-e3t', title: 'Escuela E3T',           tableClass: 'table-e3t' },
+        { gid: 704898453,    containerId: 'tabla-mat', title: 'Escuela de Matemáticas', tableClass: 'table-matematicas' },
+        { gid: 915914968,    containerId: 'tabla-fis', title: 'Escuela de Física',      tableClass: 'table-fisica' },
+        { gid: 373143542,    containerId: 'tabla-qui', title: 'Escuela de Química',     tableClass: 'table-quimica' },
+        { gid: 405299746,    containerId: 'tabla-bio', title: 'Escuela de Biología',    tableClass: 'table-biologia' }
     ];
 
+    // ==================== FUNCIÓN PARA CARGAR UNA ESCUELA ====================
     async function cargarHoja(school) {
-      const url = `${BASE_TSV}&gid=${school.gid}`;
-      try {
-        const res = await fetch(url);
-        const texto = await res.text();
-        const filas = texto.trim().split('\n').map(fila => fila.split('\t'));
+        const url = `${BASE_TSV}&gid=${school.gid}`;
+        try {
+            const res = await fetch(url);
+            const texto = await res.text();
+            const filas = texto.trim().split('\n').map(fila => fila.split('\t'));
 
-        if (filas.length === 0) {
-          document.getElementById(school.containerId).innerHTML = '<p>Hoja vacía.</p>';
-          return;
+            if (filas.length === 0) {
+                document.getElementById(school.containerId).innerHTML = '<p>Hoja vacía.</p>';
+                return;
+            }
+
+            const headers = filas[0].map(h => h.trim());
+            const dataRows = filas.slice(1);
+            const filasHTML = dataRows.map(row => buildRow(row, headers)).join('');
+
+            // Construimos el bloque details
+            const detallesHTML = `
+                <details>
+                    <summary style="font-size:20px;">${school.title}</summary>
+                    <div class="details-body">
+                        <div class="course-table-wrap">
+                            <table class="course-table ${school.tableClass}">
+                                <thead>
+                                    <tr>
+                                        <th>Asignatura</th>
+                                        <th>Código</th>
+                                        <th>Plataforma</th>
+                                        <th>Libro</th>
+                                        <th>PIN de acceso</th>
+                                        <th>Temario ExperTIC</th>
+                                        <th>Acceso</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${filasHTML}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </details>
+            `;
+
+            const container = document.getElementById(school.containerId);
+            container.innerHTML = detallesHTML;
+
+            // 🧬 SOLO PARA BIOLOGÍA: después de inyectar la tabla, agregamos los libros dentro del mismo details
+            if (school.title === 'Escuela de Biología') {
+                await agregarLibrosBiologia(container);
+            }
+
+        } catch (error) {
+            document.getElementById(school.containerId).innerHTML = '<p>Error al cargar datos.</p>';
+            console.error(error);
+        }
+    }
+
+    // ==================== FUNCIÓN PARA AGREGAR LIBROS DENTRO DEL DETAILS DE BIOLOGÍA ====================
+    async function agregarLibrosBiologia(container) {
+        try {
+            const res = await fetch(LIBROS_TSV);
+            const texto = await res.text();
+            const filas = texto.trim().split('\n').map(f => f.split('\t').map(c => c.trim()));
+
+            // Metadatos de libros (filas 3 a 8, índices 2 a 7)
+            const fNombre    = filas[2];
+            const fAutores   = filas[3];
+            const fEditorial = filas[4];
+            const fEdicion   = filas[5];
+            const fImagenes  = filas[6];
+            const fEnlaces   = filas[7];
+
+            const numLibros = fNombre.length - 1;
+
+            // Tabla de lecciones (fila 9 en adelante)
+            const filasLecciones = filas.slice(8);
+            const headersLecciones = filasLecciones[0];
+            const dataLecciones = filasLecciones.slice(1);
+
+            // Generar tarjetas de libros
+            const tarjetasHTML = Array.from({ length: numLibros }, (_, i) => {
+                const col = i + 1;
+                const nombre    = fNombre[col]    || '—';
+                const autores   = fAutores[col]   || '—';
+                const editorial = fEditorial[col] || '—';
+                const edicion   = fEdicion[col]   || '—';
+                const imagen    = fImagenes[col]  || '';
+                const enlace    = fEnlaces[col]   || '';
+
+                const imgHTML = imagen && imagen.startsWith('http')
+                    ? `<img src="${imagen}" alt="Portada de ${nombre}" class="libro-card-img">`
+                    : `<div class="libro-card-img-placeholder">📖</div>`;
+
+                const btnHTML = enlace && enlace.startsWith('http')
+                    ? `<a href="${enlace}" target="_blank" class="btn-course">Ir al curso →</a>`
+                    : `<span class="no-link">Enlace por confirmar</span>`;
+
+                return `
+                    <div class="libro-card">
+                        ${imgHTML}
+                        <div class="libro-card-body">
+                            <p class="libro-titulo">${nombre}</p>
+                            <p class="libro-meta"><span class="libro-meta-label">Autores</span>${autores}</p>
+                            <p class="libro-meta"><span class="libro-meta-label">Editorial</span>${editorial}</p>
+                            <p class="libro-meta"><span class="libro-meta-label">Edición</span>${edicion}</p>
+                        </div>
+                        <div class="libro-card-footer">${btnHTML}</div>
+                    </div>`;
+            }).join('');
+
+            // Tabla de lecciones
+            const thLibros = Array.from({ length: numLibros }, (_, i) =>
+                `<th>${headersLecciones[i + 1] || `Libro ${i + 1}`}</th>`
+            ).join('');
+
+            const filasTablaHTML = dataLecciones.map(row => {
+                const leccion = row[0] || '';
+                if (!leccion) return '';
+                const celdas = Array.from({ length: numLibros }, (_, i) => {
+                    const enlace = (row[i + 1] || '').trim();
+                    return enlace && enlace.startsWith('http')
+                        ? `<td><a href="${enlace}" target="_blank" class="leccion-link">✔️</a></td>`
+                        : `<td><span class="no-link">—</span></td>`;
+                }).join('');
+                return `<tr><td>${leccion}</td>${celdas}</tr>`;
+            }).join('');
+
+            const librosHTML = `
+                <div style="margin-top: 2rem; border-top: 1px solid #ddd; padding-top: 1rem;">
+                    <h3>📚 Libros de Biología</h3>
+                    <div class="libro-grid">${tarjetasHTML}</div>
+                    <div class="lecciones-section">
+                        <details>
+                            <summary>Lecciones por libro</summary>
+                            <div class="lecciones-wrap">
+                                <table class="lecciones-table table-biologia">
+                                    <thead><tr><th>${headersLecciones[0] || 'Lección'}</th>${thLibros}</tr></thead>
+                                    <tbody>${filasTablaHTML}</tbody>
+                                </table>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            `;
+
+            // Buscamos el .details-body dentro del container (que es el div #tabla-bio que contiene el details)
+            const detailsBody = container.querySelector('details .details-body');
+            if (detailsBody) {
+                detailsBody.insertAdjacentHTML('beforeend', librosHTML);
+            }
+
+        } catch (error) {
+            console.error('Error cargando libros de Biología:', error);
+            const detailsBody = container.querySelector('details .details-body');
+            if (detailsBody) {
+                detailsBody.insertAdjacentHTML('beforeend', '<p style="color:red;">Error al cargar los libros.</p>');
+            }
+        }
+    }
+
+    // ==================== FUNCIÓN PARA CONSTRUIR FILAS DE LA TABLA ====================
+    function buildRow(row, headers) {
+        const get = (colName) => {
+            const idx = headers.indexOf(colName);
+            return idx !== -1 ? (row[idx] || '').trim() : '';
+        };
+
+        const asignatura = get('Asignatura');
+        const codigo = get('Código') || '—';
+        const plataforma = get('Plataforma');
+        const libro = get('Libros Connect');
+        const pin = get('Pin de acceso');
+        const TemarioExperTIC = get('Temario ExperTIC');
+        const enlaceCurso = get('Enlace al curso');
+
+        let plataformaHTML = '';
+        const platLower = plataforma.toLowerCase();
+        if (platLower === 'connect') {
+            plataformaHTML = '<span class="platform-badge platform-connect">Connect</span>';
+        } else if (platLower === 'aleks') {
+            plataformaHTML = '<span class="platform-badge platform-aleks">Aleks</span>';
+        } else {
+            plataformaHTML = `<span class="platform-badge">${plataforma}</span>`;
         }
 
-        // La primera fila contiene los encabezados
-        const headers = filas[0].map(h => h.trim());
-        const dataRows = filas.slice(1);
+        let pinHTML = '';
+        if (!pin || pin === '—') {
+            pinHTML = '<span class="no-pin">—</span>';
+        } else {
+            pinHTML = `<span class="pin-badge">${pin}</span>`;
+        }
 
-        // Construir el HTML de las filas de la tabla usando la función auxiliar
-        const filasHTML = dataRows.map(row => buildRow(row, headers)).join('');
+        let recursosHTML = '';
+        if (TemarioExperTIC && TemarioExperTIC.startsWith('http')) {
+            recursosHTML = `<a href="${TemarioExperTIC}" target="_blank" class="icon-link">📄 Temario ExperTIC</a>`;
+        } else {
+            recursosHTML = '—';
+        }
 
-        // Construir el bloque <details> completo
-        const detallesHTML = `
-          <details>
-            <summary style="font-size:20px;">${school.title}</summary>
-            <div class="details-body">
-              <div class="course-table-wrap">
-                <table class="course-table ${school.tableClass}">
-                  <thead>
-                    <tr>
-                      <th>Asignatura</th>
-                      <th>Código</th>
-                      <th>Plataforma</th>
-                      <th>Libro</th>
-                      <th>PIN de acceso</th>
-                      <th>Temario ExperTIC</th>
-                      <th>Acceso</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${filasHTML}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </details>
-        `;
+        let accesoHTML = '';
+        if (enlaceCurso && enlaceCurso.startsWith('http')) {
+            accesoHTML = `<a href="${enlaceCurso}" target="_blank" class="btn-course">Ir al curso →</a>`;
+        } else {
+            accesoHTML = '<span class="no-pin">Enlace por confirmar</span>';
+        }
 
-        document.getElementById(school.containerId).innerHTML = detallesHTML;
-
-      } catch (error) {
-        document.getElementById(school.containerId).innerHTML = '<p>Error al cargar datos.</p>';
-        console.error(error);
-      }
+        return `
+            <tr>
+                <td>${asignatura}</td>
+                <td>${codigo}</td>
+                <td>${plataformaHTML}</td>
+                <td>${libro}</td>
+                <td>${pinHTML}</td>
+                <td>${recursosHTML}</td>
+                <td>${accesoHTML}</td>
+            </tr>`;
     }
 
-    function buildRow(row, headers) {
-      // Función auxiliar para obtener el valor de una columna por su nombre
-      const get = (colName) => {
-        const idx = headers.indexOf(colName);
-        return idx !== -1 ? (row[idx] || '').trim() : '';
-      };
-
-      const asignatura = get('Asignatura');
-      const codigo = get('Código') || '—';
-      const plataforma = get('Plataforma');
-      const libro = get('Libros Connect');
-      const pin = get('Pin de acceso');
-      const TemarioExperTIC = get('Temario ExperTIC');
-      const enlaceCurso = get('Enlace al curso');
-
-      // Badge de plataforma (Connect o Aleks)
-      let plataformaHTML = '';
-      const platLower = plataforma.toLowerCase();
-      if (platLower === 'connect') {
-        plataformaHTML = '<span class="platform-badge platform-connect">Connect</span>';
-      } else if (platLower === 'aleks') {
-        plataformaHTML = '<span class="platform-badge platform-aleks">Aleks</span>';
-      } else {
-        plataformaHTML = `<span class="platform-badge">${plataforma}</span>`;
-      }
-
-      // PIN de acceso
-      let pinHTML = '';
-      if (!pin || pin === '—') {
-        pinHTML = '<span class="no-pin">—</span>';
-      } else {
-        pinHTML = `<span class="pin-badge">${pin}</span>`;
-      }
-
-      // Recursos (Acuerdo CA)
-      let recursosHTML = '';
-      if (TemarioExperTIC && TemarioExperTIC.startsWith('http')) {
-        recursosHTML = `<a href="${TemarioExperTIC}" target="_blank" class="icon-link">📄 Temario ExperTIC</a>`;
-      } else {
-        recursosHTML = '—';
-      }
-
-      // Acceso (Ir al curso)
-      let accesoHTML = '';
-      if (enlaceCurso && enlaceCurso.startsWith('http')) {
-        accesoHTML = `<a href="${enlaceCurso}" target="_blank" class="btn-course">Ir al curso →</a>`;
-      } else {
-        accesoHTML = '<span class="no-pin">Enlace por confirmar</span>';
-      }
-
-      return `
-        <tr>
-          <td>${asignatura}</td>
-          <td>${codigo}</td>
-          <td>${plataformaHTML}</td>
-          <td>${libro}</td>
-          <td>${pinHTML}</td>
-          <td>${recursosHTML}</td>
-          <td>${accesoHTML}</td>
-        </tr>`;
-    }
-
-    // Al cargar la página, procesamos todas las escuelas
+    // ==================== INICIALIZACIÓN ====================
     window.addEventListener('DOMContentLoaded', () => {
-      SCHOOLS.forEach(school => cargarHoja(school));
+        SCHOOLS.forEach(school => cargarHoja(school));
     });
 
-    // --- Copiar PIN al hacer clic ---
+    // ==================== COPIAR PIN (funciona para todas las tablas) ====================
     document.addEventListener('click', function (e) {
-    // Buscar si se hizo clic en un elemento .pin-badge
-    const badge = e.target.closest('.pin-badge');
-    if (!badge) return; // Si no es un PIN, no hacemos nada
-
-    e.preventDefault();
-    const pinOriginal = badge.textContent.trim();
-
-    // Intentar usar la API moderna del portapapeles
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(pinOriginal)
-        .then(() => mostrarConfirmacion(badge, pinOriginal))
-        .catch(() => copiarFallback(badge, pinOriginal));
-    } else {
-        // Fallback para navegadores antiguos
-        copiarFallback(badge, pinOriginal);
-    }
+        const badge = e.target.closest('.pin-badge');
+        if (!badge) return;
+        e.preventDefault();
+        const pinOriginal = badge.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(pinOriginal)
+                .then(() => mostrarConfirmacion(badge, pinOriginal))
+                .catch(() => copiarFallback(badge, pinOriginal));
+        } else {
+            copiarFallback(badge, pinOriginal);
+        }
     });
 
     function mostrarConfirmacion(badge, textoOriginal) {
         badge.textContent = '¡Copiado!';
-        setTimeout(() => {
-            badge.textContent = textoOriginal;
-        }, 1500);
+        setTimeout(() => { badge.textContent = textoOriginal; }, 1500);
     }
 
     function copiarFallback(badge, texto) {
