@@ -1857,7 +1857,7 @@
         if (!pin || pin === '—') {
             pinHTML = '<span class="no-pin">—</span>';
         } else {
-            pinHTML = `<span class="pin-badge">${pin}</span>`;
+            pinHTML = `<span class="pin-badge" data-pin="${pin}">${pin}</span>`;
         }
 
         let recursosHTML = '';
@@ -1889,14 +1889,17 @@
     // ==================== INICIALIZACIÓN ====================
     window.addEventListener('DOMContentLoaded', () => {
         SCHOOLS.forEach(school => cargarHoja(school));
-    });
+    });// para asociar timers a cada badge
 
     // ==================== COPIAR PIN (funciona para todas las tablas) ====================
     document.addEventListener('click', function (e) {
         const badge = e.target.closest('.pin-badge');
         if (!badge) return;
         e.preventDefault();
-        const pinOriginal = badge.textContent.trim();
+
+        const pinOriginal = badge.getAttribute('data-pin');
+        if (!pinOriginal) return;   // Si no hay atributo o está vacío, no hacemos nada
+
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(pinOriginal)
                 .then(() => mostrarConfirmacion(badge, pinOriginal))
@@ -1905,6 +1908,21 @@
             copiarFallback(badge, pinOriginal);
         }
     });
+
+    const timers = new WeakMap();
+
+    function mostrarConfirmacion(badge, pinOriginal) {
+        // Si ya hay un temporizador activo en este badge, lo cancelamos
+        if (timers.has(badge)) {
+            clearTimeout(timers.get(badge));
+        }
+        badge.textContent = '¡Copiado!';
+        const timer = setTimeout(() => {
+            badge.textContent = pinOriginal;   // ← aquí restauramos con el PIN original
+            timers.delete(badge);
+        }, 1500);
+        timers.set(badge, timer);
+    }
 
     function mostrarConfirmacion(badge, textoOriginal) {
         badge.textContent = '¡Copiado!';
