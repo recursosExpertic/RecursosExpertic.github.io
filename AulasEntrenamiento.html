@@ -1758,7 +1758,7 @@
                 const enlace    = fEnlaces[col]   || '';
 
                 const imgHTML = imagen && imagen.startsWith('http')
-                    ? `<img src="${imagen}" alt="Portada de ${nombre}" class="libro-card-img" style="width:130; height:145px; object-fit:cover;>`
+                    ? `<img src="${imagen}" alt="Portada de ${nombre}">`
                     : `<div class="libro-card-img-placeholder">📖</div>`;
 
                 const btnHTML = enlace && enlace.startsWith('http')
