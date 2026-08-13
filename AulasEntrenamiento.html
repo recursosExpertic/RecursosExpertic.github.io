@@ -545,7 +545,7 @@
       flex-direction: column;
       background: #fff;
     }
-    .libro-card-img { width: 100%; height: 180px; object-fit: cover; }
+    .libro-card-img { width: 150px; height: 180px; object-fit: cover; }
     .libro-card-img-placeholder {
       width: 100%; height: 180px;
       display: flex; align-items: center; justify-content: center;
@@ -1758,7 +1758,7 @@
                 const enlace    = fEnlaces[col]   || '';
 
                 const imgHTML = imagen && imagen.startsWith('http')
-                    ? `<img src="${imagen}" alt="Portada de ${nombre}" class="libro-card-img" width="150" height="200">`
+                    ? `<img src="${imagen}" alt="Portada de ${nombre}" class="libro-card-img">`
                     : `<div class="libro-card-img-placeholder">📖</div>`;
 
                 const btnHTML = enlace && enlace.startsWith('http')
